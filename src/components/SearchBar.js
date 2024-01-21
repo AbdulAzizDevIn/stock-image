@@ -51,9 +51,7 @@ const SearchBar = ({onApiCallClick}) => {
     };
 
     const handleApiCall = async () => {
-        // Validation check: Ensure search value is not empty
         if (searchItem.trim() === "") {
-            // Handle empty search value (e.g., display an error message)
             console.log("Search value cannot be empty");
             return;
         }
@@ -70,7 +68,6 @@ const SearchBar = ({onApiCallClick}) => {
     };
 
     useEffect(() => {
-        // You can add additional side effects if needed
     }, [searchItem]);
 
     return (

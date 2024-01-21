@@ -1,10 +1,12 @@
 
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
-import './components/comp.css'
+import './components/style.css'
 
 import Home from './components/Home';
 import Navbar from './components/NavBar';
+import DownloadHist from './components/DownloadHist';
+
 function App() {
 
 
@@ -15,7 +17,12 @@ function App() {
       children: [{
         path: "/",
         element: <Home/>
-      }]
+      },
+      {
+        path: "/download-history",
+        element: <DownloadHist/>
+      }
+    ]
     }
   ])
   return (

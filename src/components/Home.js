@@ -1,19 +1,21 @@
-// Home.js
 
 import { Button } from "@mui/material";
 import SearchBar from "./SearchBar";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useSelector } from "react-redux";
 import ImagePreview from "./ImagePreview";
 
 const Home = () => {
   const imageBox = useSelector((state) => state.imageBox);
   const searchItem = useSelector((state) => state.searchItem);
+  const downloadImage = useSelector((state) => state.downloadImage);
+
 
   const [apiCallClicked, setApiCallClicked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
-
+  console.log(imageBox);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleApiCallClick = () => {
@@ -27,7 +29,12 @@ const Home = () => {
   const handleImageClick = (image) => {
     setSelectedImage(image);
   };
-
+  useEffect(() => {
+    setLoading2(true)
+    setTimeout(() => {
+      setLoading2(false);
+    }, 2000);
+  }, []);
   return (
     <>
       <div
@@ -37,6 +44,7 @@ const Home = () => {
           height: "100vh",
           backgroundAttachment: "fixed",
           backgroundSize: "cover",
+          overflow:"hidden"
         }}
       >
         <div style={{ width: "100%", height: "40vh" }}>
@@ -74,65 +82,70 @@ const Home = () => {
             {apiCallClicked && <div style={{ paddingTop: "20px" }}>Results: {searchItem}</div>}
           </div>
         </div>
-
+            
         {loading ? (
-          <div style={{ width: "100%", height: "60vh", background: "white" }}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "150px" }}>
+          <div style={{ width: "100%", height: "60vh", background: "white",overflowY: "auto" }}>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center",}}>
               <img style={{ width: 50, paddingTop: 50 }} src="https://i.stack.imgur.com/kOnzy.gif" alt="loading" />
             </div>
           </div>
         ) : apiCallClicked ? (
-          <div style={{ width: "100%", height: "60vh", background: "white" }}>
-            <div
-              style={{
-                paddingTop: "1%",
-                paddingBottom: "1%",
-                paddingLeft: "4%",
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-              }}
-            >
-              {imageBox.map((image) => (
-                <div
-                  key={image.id}
-                  style={{
-                    width: "100%",
-                    maxWidth: "550px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-                    fontSize: "15px",
-                    marginRight: "15px",
-                    marginLeft: "15px",
-                    overflow: "hidden",
-                    marginBottom: "10px",
-                  }}
-                  
-                >
-                  <img
+          <div style={{ width: "100%", height: "60vh", background: "white",overflowY: "auto"  }}>
+            {imageBox.length === 0 ? (
+              <div style={{ textAlign: "center", color: "gray",fontSize:"20px",fontWeight:"bold" }}>No results found</div>
+            ) : (
+              <div
+                style={{
+                  paddingTop: "1%",
+                  paddingBottom: "1%",
+                  paddingLeft: "4%",
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap" ,
+                  overflowY: "auto",
+                }}
+              >
+                {imageBox.map((image) => (
+                  <div
+                    key={image.id}
                     style={{
                       width: "100%",
-                      height: "350px",
-                      objectFit: "cover",
-                      borderTopLeftRadius: "4px",
-                      borderTopRightRadius: "4px",
-                      cursor: "pointer",
+                      maxWidth: "550px",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+                      fontSize: "15px",
+                      marginRight: "15px",
+                      marginLeft: "15px",
+                      overflow: "hidden",
+                      marginBottom: "10px",
+                      
                     }}
-                    src={image.webformatURL}
-                    alt=""
-                    onClick={() => handleImageClick(image)}
-                  />
-                  <p>
-                    {image.tags.split(",").map((tag) => (
-                      <Button sx={{ color: "gray", border: "0.01px solid grey", marginLeft: "5px", height: "25px" }}>{tag.trim()}</Button>
-                    ))}
-                  </p>
-                </div>
-              ))}
-            </div>
+                  >
+                    <img
+                      style={{
+                        width: "100%",
+                        height: "350px",
+                        objectFit: "cover",
+                        borderTopLeftRadius: "4px",
+                        borderTopRightRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                      src={image.webformatURL}
+                      alt=""
+                      onClick={() => handleImageClick(image)}
+                    />
+                    <p>
+                      {image.tags.split(",").map((tag) => (
+                        <Button sx={{ color: "gray", border: "0.01px solid grey", marginLeft: "5px", height: "25px" }}>{tag.trim()}</Button>
+                      ))}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", marginTop: "80px" }}>

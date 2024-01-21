@@ -1,12 +1,37 @@
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ImagePreview = ({ selectedImage, onClose }) => {
+    const dispatch = useDispatch();
+    const downloadImage = useSelector((state) => state.downloadImage);
     const handleCloseClick = () => {
         onClose();
     };
 
+    const [selectedResolution, setSelectedResolution] = useState(selectedImage.previewURL);
+    const handleResolutionChange = (e) => {
+        setSelectedResolution(e.target.value);
+    };
+    const handleImageDownload = () => {
+        const existingDownloads = JSON.parse(localStorage.getItem("downloadImage")) || [];
+
+        const isAlreadyDownloaded = existingDownloads.some((downloadedImage) => downloadedImage.id === selectedImage.id);
+
+        if (!isAlreadyDownloaded) {
+            dispatch({ type: "SET_DOWNLOAD_IMAGE", payload: selectedImage });
+
+            const updatedDownloads = [...existingDownloads, selectedImage];
+            localStorage.setItem("downloadImage", JSON.stringify(updatedDownloads));
+        }
+
+        window.open(selectedResolution, '_blank');
+    };
+    useEffect(() => {
+        setSelectedResolution(selectedImage.previewURL)
+    }, [selectedImage])
 
     return (
         <>
@@ -76,43 +101,75 @@ const ImagePreview = ({ selectedImage, onClose }) => {
 
                             }}>
 
-                                <div class="hidden-toggles">
-                                    <input name="coloration-level" type="radio" id="coloration-low" class="hidden-toggles__input" value={selectedImage.previewURL}/>
-                                    <label for="coloration-low" class="hidden-toggles__label">Low</label>
+                                <div className="hidden-toggles">
+                                    <input
+                                        name="coloration-level"
+                                        type="radio"
+                                        id="coloration-low"
+                                        className="hidden-toggles__input"
+                                        value={selectedImage.previewURL}
+                                        checked={selectedResolution === selectedImage.previewURL}
+                                        onChange={handleResolutionChange}
+                                    />
+                                    <label htmlFor="coloration-low" className="hidden-toggles__label">
+                                        Low
+                                    </label>
 
-                                    <input name="coloration-level" type="radio" id="coloration-medium" class="hidden-toggles__input" value={selectedImage.webformatURL}/>
-                                    <label for="coloration-medium" class="hidden-toggles__label">Medium</label>
+                                    <input
+                                        name="coloration-level"
+                                        type="radio"
+                                        id="coloration-medium"
+                                        className="hidden-toggles__input"
+                                        value={selectedImage.webformatURL}
+                                        checked={selectedResolution === selectedImage.webformatURL}
+                                        onChange={handleResolutionChange}
+                                    />
+                                    <label htmlFor="coloration-medium" className="hidden-toggles__label">
+                                        Medium
+                                    </label>
 
-                                    <input name="coloration-level" type="radio" id="coloration-high" class="hidden-toggles__input" value={selectedImage.largeImageURL} />
-                                    <label for="coloration-high" class="hidden-toggles__label">High</label>
+                                    <input
+                                        name="coloration-level"
+                                        type="radio"
+                                        id="coloration-high"
+                                        className="hidden-toggles__input"
+                                        value={selectedImage.largeImageURL}
+                                        checked={selectedResolution === selectedImage.largeImageURL}
+                                        onChange={handleResolutionChange}
+                                    />
+                                    <label htmlFor="coloration-high" className="hidden-toggles__label">
+                                        High
+                                    </label>
                                 </div>
                                 <div style={{
                                     display: "flex",
                                     justifyContent: 'center',
                                     alignItems: "center",
                                 }}>
-                                    <button style={{
-                                        marginTop: 30,
-                                        marginLeft: 30,
-                                        padding: "10px",
-                                        background: "#4BC34B",
-                                        width: "274.67px",
-                                        height: "40.33px",
-                                        border: "0",
-                                        borderRadius: "4.44px",
-                                        color: "#FFFFFF",
-                                        cursor: "pointer",
-                                        fontSize: "15px",
-                                        fontWeight: "bold",
-                                    }}>Download for free!</button>
+                                    <button
+                                        onClick={handleImageDownload}
+                                        style={{
+                                            marginTop: 30,
+                                            marginLeft: 30,
+                                            padding: "10px",
+                                            background: "#4BC34B",
+                                            width: "274.67px",
+                                            height: "40.33px",
+                                            border: "0",
+                                            borderRadius: "4.44px",
+                                            color: "#FFFFFF",
+                                            cursor: "pointer",
+                                            fontSize: "15px",
+                                            fontWeight: "bold",
+                                        }}>Download for free!</button>
                                 </div>
                             </div>
                             <div style={{ fontSize: "22px", fontWeight: "bold" }}>Information</div>
                             <div style={{
-                                display:"flex",
+                                display: "flex",
                                 justifyContent: "flex-start",
                                 alignItems: "center",
-                                }}>
+                            }}>
                                 <div style={{
                                     width: "100px",
                                     height: "100px",
@@ -128,8 +185,8 @@ const ImagePreview = ({ selectedImage, onClose }) => {
 
                                 </div>
                                 <p style={{
-                                    marginLeft:"10px",
-                                    fontWeight:"bold"
+                                    marginLeft: "10px",
+                                    fontWeight: "bold"
                                 }}>{selectedImage.user}</p>
                             </div>
 

@@ -2,7 +2,8 @@ import { configureStore } from "@reduxjs/toolkit";
 
 const initialState = {
     imageBox:[],
-    searchItem:""
+    searchItem:"",
+    downloadImage:[]
 }
 
 const reducer = (state = initialState, action) =>{
@@ -16,7 +17,12 @@ const reducer = (state = initialState, action) =>{
             return{
                 ...state,
                 searchItem: action.payload
-            }
+            };
+        case "SET_DOWNLOAD_IMAGE":
+            return{
+                ...state,
+                downloadImage:[...state.downloadImage, action.payload]
+            }   
         default:
             return state
     }

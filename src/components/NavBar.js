@@ -7,10 +7,17 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import HistoryIcon from '@mui/icons-material/History';
+
 
 import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-import { useState } from "react";
+
+
+import { auth, provider } from "../firebaseAuth"
+import { signInWithPopup, signOut } from "firebase/auth"
 
 function Navbar() {
 
@@ -26,12 +33,60 @@ function Navbar() {
     };
 
     const pages = ["Login"];
+    const navigate = useNavigate();
 
+
+
+    const [user, setUser] = useState({
+        email: "",
+        name: "",
+        userImg: ""
+    });
+
+
+    const handelLogin = () => {
+        signInWithPopup(auth, provider).then((data) => {
+            localStorage.setItem("userEmail", data.user.email);
+            localStorage.setItem("userName", data.user.displayName);
+            localStorage.setItem("userImg", data.user.photoURL);
+            localStorage.setItem("user", true);
+            window.location.reload();
+        })
+            .catch((err) => {
+                console.log(err);
+            })
+
+    }
+
+    const handelLogout = () => {
+        signOut(auth)
+            .then(() => {
+                localStorage.setItem("user", false);
+                localStorage.removeItem("userEmail");
+                localStorage.removeItem("userName");
+                localStorage.removeItem("userImg");
+                window.location.reload();
+            })
+    }
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser === "true") {
+            const storedEmail = localStorage.getItem("userEmail");
+            const storedName = localStorage.getItem("userName");
+            const storedUserImg = localStorage.getItem("userImg");
+            setUser({
+                email: storedEmail,
+                name: storedName,
+                userImg: storedUserImg
+            });
+        }
+    }, []);
+    let userAuth = localStorage.getItem("user") === "true";
     return (
         <>
             <AppBar
                 sx={{
-                    backgroundColor: "rgba(0, 0, 0, 0.4)", 
+                    backgroundColor: "rgba(0, 0, 0, 0.4)",
                     backdropFilter: "blur(5px)",
                     display: "flex",
                     alignItems: "flex-end",
@@ -39,11 +94,11 @@ function Navbar() {
                     position: "fixed",
                     zIndex: 1,
                     width: "auto",
-                    height: "67.69px", 
-                    top: "39.19px", 
-                    left: "32.06px", 
+                    height: "67.69px",
+                    top: "39.19px",
+                    left: "32.06px",
                     right: "30px",
-                    borderRadius: " 8.91px", 
+                    borderRadius: " 8.91px",
                 }}
                 position="static">
                 <Container maxWidth="xl">
@@ -98,13 +153,29 @@ function Navbar() {
                                     display: { xs: 'block', md: 'none' },
                                 }}
                             >
+                                <MenuItem onClick={() => navigate("/download-history")}>
+                                    <Typography style={{ display: "flex", justifyContent: "space-around" }} textAlign="center">Download History</Typography>
+                                </MenuItem>
+                                {userAuth ? (
+                                    <>
+                                        <MenuItem onClick={handelLogout}>
+                                            <Typography style={{ display: "flex", justifyContent: "space-around" }} textAlign="center">Logout</Typography>
+                                        </MenuItem>
+                                    </>
+                                ) : (
 
-                                <MenuItem>
-                                    <Typography style={{ display: "flex", justifyContent: "space-around" }} textAlign="center" >Login</Typography>
-                                </MenuItem>
-                                <MenuItem >
-                                    <Typography style={{ display: "flex", justifyContent: "space-around" }} textAlign="center" >Create Account</Typography>
-                                </MenuItem>
+                                    <>
+                                        <MenuItem onClick={handelLogin}>
+                                            <Typography style={{ display: "flex", justifyContent: "space-around" }} textAlign="center">Create Account</Typography>
+                                        </MenuItem>
+                                        <MenuItem onClick={handelLogin}>
+                                            <Typography style={{ display: "flex", justifyContent: "space-around" }} textAlign="center">Login</Typography>
+                                        </MenuItem>
+                                    </>
+                                )}
+
+
+
 
                             </Menu>
                         </Box>
@@ -126,33 +197,96 @@ function Navbar() {
                         >
                             Homepage
                         </Typography>
-                        <Typography className="big-search">
-
+                        <Typography className="big-search" style={{
+                            display:"flex",
+                            justifyContent:"center",
+                            alignItems: 'center',
+                        }}>
+                            {
+                                userAuth && (
+                                    <>
+                                    <Avatar alt="emy Sharp" src={user.userImg} />
+                                    <Typography style={{
+                                        marginLeft:"10px"
+                                    }}>
+                                    {user.name}
+                                    </Typography> 
+                                    </>
+                                )
+                            }
                         </Typography>
 
-                        <Box style={{ marginRight: "50px", justifyContent: "flex-end" }} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-
-                            <Button sx={{ my: 2, color: 'white', display: 'block', marginRight:"15px" }}>Login</Button>
+                        <Box style={{ marginRight: "50px", justifyContent: "flex-end", alignItems: "center" }} sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
+                        >
                             <Button
+                                onClick={() => navigate("/download-history")}
                                 sx={{
-                                    color: 'white',
                                     my: 2,
-                                    background: "transparent",
-                                    width: "162.98px", // Apply the width style
-                                    height: "34.73px", // Apply the height style
-                                    borderRadius: "8.91px", // Apply the border-radius style
-                                    border: "2.67px solid", // Apply the border style
+                                    color: 'white',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    marginRight: "15px",
+                                    border: "0.5px solid",
                                 }}
                             >
-                                Create Account
+                                Download History <HistoryIcon sx={{ textAlign: "center" }} />
                             </Button>
+                            {userAuth === true ? (
+                                <>
+                                    <Avatar alt="emy Sharp" src={user.userImg} />
+                                    <Typography className="user-name" style={{
+                                        paddingLeft: "10px",
+                                        fontWeight: "bold",
+                                        paddingRight: "10px"
+                                    }}>
+                                        {user.name}
+                                    </Typography>
+                                    <Button onClick={handelLogout}
+                                        sx={{
+                                            color: 'red',
+                                            my: 2,
+                                            background: "transparent",
+                                            width: "162.98px",
+                                            height: "34.73px",
+                                            borderRadius: "8.91px",
+                                            border: "2.67px solid",
+                                        }}
+                                    >Logout</Button>
+                                </>
+
+                            ) : (
+                                <>
+
+                                    <Button
+                                        onClick={handelLogin}
+                                        sx={{ my: 2, color: 'white', display: 'block', marginRight: "15px" }}
+                                    >
+                                        Login
+                                    </Button>
+                                    <Button
+                                        onClick={handelLogin}
+                                        sx={{
+                                            color: 'white',
+                                            my: 2,
+                                            background: "transparent",
+                                            width: "162.98px",
+                                            height: "34.73px",
+                                            borderRadius: "8.91px",
+                                            border: "2.67px solid",
+                                        }}
+                                    >
+                                        Create Account
+                                    </Button>
+                                </>
+                            )}
                         </Box>
 
 
-                    </Toolbar>
 
-                </Container>
-            </AppBar>
+                    </Toolbar >
+
+                </Container >
+            </AppBar >
             <Outlet />
         </>
     );
