@@ -36,21 +36,15 @@ const ImagePreview = ({ selectedImage, onClose }) => {
     return (
         <>
             {selectedImage && (
-                <div style={{
-                    width: '1350px',
-                    height: '780px',
-                    top: '120.37px',
-                    left: '310.1px',
-                    borderRadius: '8.89px',
-                    background: "white",
-                    position: "absolute",
-                }}>
+                <div className='preview'
+                 >
                     <div style={{
                         width: "100%",
                         height: "76px",
                         background: "#F5F5F5",
                         borderRadius: '8.89px',
                         display: "flex",
+                        flexDirection:"row",
                         justifyContent: 'space-between',
                         alignItems: "center",
                     }}>
@@ -58,22 +52,12 @@ const ImagePreview = ({ selectedImage, onClose }) => {
                         <CloseIcon onClick={handleCloseClick} sx={{ fontSize: "30px", border: "0.1px solid black", borderRadius: "8px", marginRight: "25px", cursor: "pointer" }} />
 
                     </div>
-                    <div style={{
-
-                        marginTop: "40px",
-                        marginLeft: "25px",
-                        display: "flex",
-                        justifyContent: 'space-between',
-                        alignItems: "center",
-                    }}>
+                    <div 
+                    className='image-container'
+                    >
                         <div
                         >
-                            <img style={{
-                                width: "900px",
-                                height: "600px",
-                                background: "orange",
-                                borderRadius: '7px',
-                            }} src={selectedImage.webformatURL} alt="" />
+                            <img  className="image "  src={selectedImage.webformatURL} alt="" />
                             <div style={{
                                 display: 'flex'
                             }}>
