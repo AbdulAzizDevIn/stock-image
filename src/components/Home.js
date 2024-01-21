@@ -65,14 +65,8 @@ const Home = () => {
             <SearchBar onApiCallClick={handleApiCallClick} />
           </div>
           <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "white",
-              fontSize: "60px",
-              fontWeight: "700",
-            }}
+          className="result"
+            
           >
             {apiCallClicked && <div style={{ paddingTop: "20px" }}>Results: {searchItem}</div>}
           </div>

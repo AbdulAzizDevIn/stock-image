@@ -142,6 +142,17 @@
         background: orange;
         border-radius: 7px;
 }
+.result{
+
+    
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 60px;
+        font-weight: 700;
+     
+}
 @media (max-width: 600px) {
     .headline {
         font-size: 30px;
@@ -164,5 +175,9 @@
     .image{
         width: 380px;
         height: 300px;
+    }
+    .result{
+        font-size: 45px;
+        font-weight: 700;
     }
 }
