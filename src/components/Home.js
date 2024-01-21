@@ -35,6 +35,9 @@ const Home = () => {
       setLoading2(false);
     }, 2000);
   }, []);
+
+
+  
   return (
     <>
       <div
@@ -52,16 +55,8 @@ const Home = () => {
             <div style={{ paddingTop: "150px" }}> </div>
           ) : (
             <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                paddingTop: "150px",
-                color: "white",
-                fontSize: "70px",
-                fontWeight: "bold",
-              }}
+            className="headline"
+            
             >
               Discover over 2,000,000 <div>free Stock Images</div>
             </div>

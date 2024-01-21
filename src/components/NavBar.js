@@ -197,10 +197,8 @@ function Navbar() {
                         >
                             Homepage
                         </Typography>
-                        <Typography className="big-search" style={{
-                            display:"flex",
-                            justifyContent:"center",
-                            alignItems: 'center',
+                        <Typography className="avatar" style={{
+                            display: "none"
                         }}>
                             {
                                 userAuth && (
