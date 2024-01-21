@@ -197,9 +197,7 @@ function Navbar() {
                         >
                             Homepage
                         </Typography>
-                        <Typography className="avatar" style={{
-                            display: "none"
-                        }}>
+                        <Typography className="avatar">
                             {
                                 userAuth && (
                                     <>
