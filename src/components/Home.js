@@ -42,7 +42,7 @@ const Home = () => {
     <>
       <div
         style={{
-          backgroundImage: "url('https://source.unsplash.com/1600x900/')",
+          backgroundImage: "url('https://picsum.photos/1600/900')",
           width: "100%",
           height: "100vh",
           backgroundAttachment: "fixed",
