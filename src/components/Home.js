@@ -75,7 +75,7 @@ const Home = () => {
         {loading ? (
           <div style={{ width: "100%", height: "60vh", background: "white",overflowY: "auto" }}>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center",}}>
-              <img style={{ width: 50, paddingTop: 50 }} src="https://i.stack.imgur.com/kOnzy.gif" alt="loading" />
+              <img style={{ width: 50, paddingTop: 50 }} src="https://i.sstatic.net/kOnzy.gif" alt="loading" />
             </div>
           </div>
         ) : apiCallClicked ? (
